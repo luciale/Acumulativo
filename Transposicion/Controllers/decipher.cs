@@ -159,23 +159,43 @@ namespace Transposicion.Controllers
                     {
                         int row = Convert.ToInt32(Request.Form["fila"]);
                         int column = Convert.ToInt32(Request.Form["columna"]);
-                        int restriccion = row * column;
-                        Vertical vertical = new Vertical();
-                        string request = null;
+                        int total = row * column; //cantidad de bytes a leer o que van en la matriz
+                        buffer = new byte[Data.BufferLength];
+                        Vertical cif = new Vertical();
+                        //esto se repite en cada if 
+                        using (var stream = new FileStream(fullPathC, FileMode.Create))
+                        {
+                            //ya se creó el archivo
+                        }
+                        using (var stream = new FileStream(fullPath, FileMode.Create))
+                        {
+                            file.CopyTo(stream);
+                        }
 
-                        request = vertical.Decipher(file, restriccion, column, row, type_cipher, file_nameN);
-                        return StatusCode(3, request);
+                        using (var stream = new FileStream(fullPath, FileMode.Open))
+                        {
+
+                            using (BinaryReader br = new BinaryReader(stream))
+                            {
+
+                                while (br.BaseStream.Position != br.BaseStream.Length)
+                                {
+                                    buffer = br.ReadBytes(total);
+                                    cif.Decipher(buffer, column, row, fullPathC);
+
+                                }
+                            }
+                        }
+
+                        var stream1 = new FileStream(fullPathC, FileMode.Open);
+
+                        return File(stream1, System.Net.Mime.MediaTypeNames.Application.Octet, file_nameN);
                     }
 
                     if (type_cipher == "Ruta_Espiral")
                     {
-                        int row = Convert.ToInt32(Request.Form["fila"]);
-                        int column = Convert.ToInt32(Request.Form["columna"]);
-                        int restriccion = row * column;
-                        Espiral espiral = new Espiral();
-                        string request = null;
-                        request = espiral.Decipher(file, restriccion, column, row, type_cipher, file_nameN);
-                        return StatusCode(3, request);
+                       
+                        return BadRequest();
 
                     }
                     else
