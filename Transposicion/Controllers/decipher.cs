@@ -25,6 +25,10 @@ namespace Transposicion.Controllers
             //lectura archivo
             var folderName = Path.Combine("Resources", "Files");
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            if (!Directory.Exists(pathToSave))
+            {
+                Directory.CreateDirectory(pathToSave);
+            }
             string extension = Path.GetExtension(file.FileName);
             var buffer = new byte[Data.BufferLength];
 
