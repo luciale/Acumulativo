@@ -1,0 +1,1 @@
+probando.txt;0.68;1.47;31.95;huffman/pp.txt;1.81;0.55;-80.72;lzw
